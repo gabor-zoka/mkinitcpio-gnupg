@@ -71,12 +71,12 @@ EOF
             IFS=\; read file gpg_import <<EOF
 $gpg_import
 EOF
-            gpg --homedir /tmp/gpg --import $(get_file "$file")
+            gpg -q --homedir /tmp/gpg --import $(get_file "$file")
         done
     fi
 
     if [ -n "$gpg_decrypt" ]; then
-        gpg --homedir /tmp/gpg --card-status &> /dev/null
+        gpg -q --homedir /tmp/gpg --card-status &> /dev/null
         while [ -n "$gpg_decrypt" ]; do
             IFS=\; read file gpg_decrypt <<EOF
 $gpg_decrypt
@@ -85,7 +85,7 @@ EOF
 $(get_file "$file")
 EOF
             [ ! -f ${in_file} ] && echo "Could not open ciphered file, aborting."
-            gpg --homedir /tmp/gpg -o $out_file --decrypt $in_file
+            gpg -q --homedir /tmp/gpg -o $out_file --decrypt $in_file
         done
     fi
 }
