@@ -32,16 +32,26 @@ help() {
 This hook allows to use gnupg to decrypt multiple files.
 
 Options (fetched from the kernel command line):
-* gpg_decrypt=FSTYPE:encryptedfilepath:decryptedfilepath
-* gpg_import=FSTYPE:gpg-key
+* gpg_decrypt=dev:fstype:path-to-encrypted-key:outfile
+  
+  Example: gpg_decrypt=LABEL=boot1:ext3:random.gpg:/crypto_keyfile.bin
 
-Notes:
-* FSTYPE: can be 'rootfs' for the current intramfs
-* decryptedfilepath: will be in the current initramfs
+  encrypt hook from cryptsetup package by default assumes that the
+  unencrypted key is in /crypto_keyfile.bin, hence setting it saves
+  a parameter.
+
+  Naturally encrypt hook must come after this module.
+
+* gpg_import=dev:fstype:path-to-pubkey
+
+  Example: gpg_import=LABEL=boot1:ext3:public-all.asc
+
+* Alternatively you can specify a file on ramdisk via rootfs
+
+  Example: gpg_decrypt=rootfs:/random.gpg:/crypto_keyfile.bin
+           gpg_import=rootfs:/public-all.asc
+
 * Multiple files can be provided using ';' as a separator
-
-Example:
-gpg_decrypt=rootfs:/etc/keyfile.gpg:/tmp/keyfile;ext2:/dev/sda1:/encryptedkey:/etc/decryptedkey gpg_import=rootfs:/etc/public.asc
 HELPEOF
 }
 
