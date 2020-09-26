@@ -89,6 +89,9 @@ $(get_file "$file")
 EOF
             [ ! -f ${in_file} ] && echo "Could not open ciphered file, aborting."
             gpg -q --homedir /tmp/gpg -o $out_file --decrypt $in_file
+
+            # Delete secrets for security.
+            echo 'rm -f $outfile' >>/tmp/gpg/rm.sh
         done
     fi
 }
@@ -96,6 +99,7 @@ EOF
 run_cleanuphook()
 {
     killall -9 gpg-agent scdaemon pcscd &> /dev/null
+    ash /tmp/gpg/rm.sh
 }
 
 # vim: set ft=sh ts=4 sw=4 et:
