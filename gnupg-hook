@@ -51,6 +51,9 @@ EOF
                     mount -r -t "$ckarg1" "$resolved" /ckey
                     dd if="/ckey/$ckarg2" of="$file" >/dev/null 2>&1
                     umount /ckey
+                    # encrypt hook from the official cryptsetup package also 
+                    # use /ckey and complains that the dir already exists.
+                    rmdir  /ckey
                     ;;
                 *)
                     # Read raw data from the block device
